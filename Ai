@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOHIN AI</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080d1c;color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:18px;background:#111a30;
+ display:flex;justify-content:space-between;
+ align-items:center;border-bottom:1px solid #263454;
+}
+.logo{font-size:23px;font-weight:bold;color:#59baff}
+.status{color:#52e6a5;font-size:12px}
+main{max-width:650px;margin:auto;padding:20px}
+.hero{text-align:center;padding:25px 0}
+.orb{
+ width:110px;height:110px;border-radius:50%;
+ margin:auto;background:radial-gradient(circle,#a9eaff,#2879ff,#5427b8);
+ box-shadow:0 0 45px #2879ff;
+ display:flex;align-items:center;justify-content:center;
+ font-size:43px;animation:pulse 2s infinite;
+}
+@keyframes pulse{
+ 50%{box-shadow:0 0 65px #8c5cff}
+}
+h1{font-size:29px;margin-bottom:8px}
+.sub{color:#aab8d2;font-size:14px}
+.card{
+ background:#121d34;border:1px solid #293958;
+ border-radius:16px;padding:16px;margin-top:15px;
+}
+.chat{
+ height:310px;overflow-y:auto;
+ display:flex;flex-direction:column;gap:12px;
+}
+.msg{
+ padding:12px;border-radius:13px;
+ max-width:88%;line-height:1.5;font-size:14px;
+ white-space:pre-wrap;
+}
+.bot{background:#263756;align-self:flex-start}
+.user{background:#1769bd;align-self:flex-end}
+.controls{display:flex;gap:8px;margin-top:12px}
+input{
+ flex:1;min-width:0;padding:13px;
+ border-radius:12px;border:1px solid #344767;
+ background:#091329;color:white;font-size:15px;
+}
+button{
+ border:0;border-radius:12px;padding:12px;
+ background:#2587f5;color:white;font-weight:bold;
+ cursor:pointer;
+}
+.send{min-width:55px}
+.voice{background:#713ce7}
+.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tool{
+ background:#1c2b49;padding:15px;border-radius:12px;
+ text-align:center;font-size:14px;
+}
+select{
+ background:#1c2b49;color:white;border:1px solid #344767;
+ padding:9px;border-radius:9px;
+}
+footer{text-align:center;color:#7f91ad;padding:25px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">🤖 MOHIN AI</div>
+ <div class="status">● ONLINE</div>
+</header>
+
+<main>
+ <section class="hero">
+  <div class="orb">🤖</div>
+  <h1>HELLO, MOHIN!</h1>
+  <p class="sub">Your Personal AI Assistant</p>
+  <p id="clock" class="sub"></p>
+ </section>
+
+ <section class="card">
+  <h3>💬 AI CHAT</h3>
+  <div class="chat" id="chat">
+   <div class="msg bot">
+    আসসালামু আলাইকুম! আমি MOHIN AI।
+    আমাকে কিছু জিজ্ঞেস করো। 😊
+   </div>
+  </div>
+
+  <div class="controls">
+   <input id="message" placeholder="এখানে লিখুন...">
+   <button class="send" onclick="sendMessage()">➤</button>
+   <button class="voice" onclick="startVoice()">🎤</button>
+  </div>
+  <button onclick="speakLast()" style="margin-top:10px;width:100%">
+   🔊 শেষ উত্তর শুনুন
+  </button>
+ </section>
+
+ <section class="card">
+  <h3>⚡ QUICK TOOLS</h3>
+  <div class="tools">
+   <div class="tool" onclick="showTime()">🕒 সময় দেখুন</div>
+   <div class="tool" onclick="showDate()">📅 তারিখ দেখুন</div>
+   <div class="tool" onclick="showBattery()">🔋 Battery</div>
+   <div class="tool" onclick="showHelp()">❓ Help</div>
+  </div>
+ </section>
+
+ <section class="card">
+  <h3>🌐 LANGUAGE</h3>
+  <select id="language">
+   <option value="bn-BD">বাংলা</option>
+   <option value="en-US">English</option>
+  </select>
+ </section>
+</main>
+
+<footer>© 2026 MOHIN AI | Your Smart Assistant</footer>
+
+<script>
+const chat=document.getElementById("chat");
+const input=document.getElementById("message");
+let lastAnswer="";
+
+function addMessage(text,type){
+ const div=document.createElement("div");
+ div.className="msg "+type;
+ div.textContent=text;
+ chat.appendChild(div);
+ chat.scrollTop=chat.scrollHeight;
+}
+
+function reply(text){
+ lastAnswer=text;
+ addMessage(text,"bot");
+}
+
+function sendMessage(){
+ const text=input.value.trim();
+ if(!text)return;
+ addMessage(text,"user");
+ input.value="";
+
+ const t=text.toLowerCase();
+
+ if(t.includes("হ্যালো")||t.includes("hello")){
+  reply("হ্যালো! আমি MOHIN AI। তোমাকে কীভাবে সাহায্য করতে পারি?");
+ }
+ else if(t.includes("নাম")||t.includes("name")){
+  reply("আমার নাম MOHIN AI। আমি তোমার ব্যক্তিগত AI সহকারী।");
+ }
+ else if(t.includes("সময়")||t.includes("time")){
+  reply("এখন সময় "+new Date().toLocaleTimeString());
+ }
+ else if(t.includes("তারিখ")||t.includes("date")){
+  reply("আজকের তারিখ "+new Date().toLocaleDateString());
+ }
+ else if(t.includes("কে বানিয়েছে")||t.includes("who made")){
+  reply("আমাকে MOHIN তৈরি করেছে।");
+ }
+ else if(t.includes("ধন্যবাদ")||t.includes("thank")){
+  reply("তোমাকে স্বাগতম! 😊");
+ }
+ else if(t.includes("সাহায্য")||t.includes("help")){
+  reply("আমি এখন প্রাথমিক সংস্করণ। সময়, তারিখ, সাধারণ কিছু প্রশ্ন ও ভয়েস ইনপুটে সাহায্য করতে পারি।");
+ }
+ else{
+  reply("তোমার প্রশ্নটি পেয়েছি: "+text+
+  "\n\nআমি এখনো আসল AI সার্ভারের সঙ্গে যুক্ত হইনি। পরের ধাপে আমার AI Brain যুক্ত করা হবে।");
+ }
+}
+
+input.addEventListener("keydown",e=>{
+ if(e.key==="Enter")sendMessage();
+});
+
+function startVoice(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){
+  alert("এই ব্রাউজারে ভয়েস ইনপুট সমর্থিত নয়। Chrome ব্যবহার করো।");
+  return;
+ }
+ const recognition=new SR();
+ recognition.lang=document.getElementById("language").value;
+ recognition.onresult=e=>{
+  input.value=e.results[0][0].transcript;
+  sendMessage();
+ };
+ recognition.onerror=()=>alert("মাইক্রোফোন কাজ করছে না। অনুমতি পরীক্ষা করো।");
+ recognition.start();
+}
+
+function speakLast(){
+ if(!lastAnswer){alert("এখনো কোনো উত্তর নেই");return;}
+ if(!("speechSynthesis" in window)){
+  alert("এই ব্রাউজারে ভয়েস সুবিধা নেই");return;
+ }
+ speechSynthesis.cancel();
+ const utterance=new SpeechSynthesisUtterance(lastAnswer);
+ utterance.lang=document.getElementById("language").value;
+ speechSynthesis.speak(utterance);
+}
+
+function showTime(){
+ reply("এখন সময়: "+new Date().toLocaleTimeString());
+}
+function showDate(){
+ reply("আজকের তারিখ: "+new Date().toLocaleDateString());
+}
+async function showBattery(){
+ if(!navigator.getBattery){
+  reply("এই ব্রাউজারে Battery API সমর্থিত নয়।");
+  return;
+ }
+ const b=await navigator.getBattery();
+ reply("Battery: "+Math.round(b.level*100)+"%");
+}
+function showHelp(){
+ reply("আমি MOHIN AI। ভয়েস, চ্যাট, সময়, তারিখ ও ব্যাটারি তথ্য দেখতে পারো। পরের ধাপে আসল AI যুক্ত হবে।");
+}
+
+function updateClock(){
+ document.getElementById("clock").textContent=
+ "🕒 "+new Date().toLocaleString();
+}
+updateClock();
+setInterval(updateClock,1000);
+</script>
+</body>
+</html>
